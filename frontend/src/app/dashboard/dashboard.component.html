@@ -1,0 +1,112 @@
+<div class="shell">
+
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">NiftyBot</span>
+      <span class="mode-badge">{{ mode }}</span>
+    </div>
+    <div class="header-right">
+      <span class="market-status" [class.open]="market.includes('Open')">
+        {{ market }}
+      </span>
+      <span class="update-time" *ngIf="lastUpdate">Updated {{ lastUpdate }}</span>
+    </div>
+  </header>
+
+  <!-- ── Price Hero ── -->
+  <section class="price-hero">
+    <div class="nifty-price">
+      <div class="price-label">NIFTY 50</div>
+      <div class="price-value">{{ price | number:'1.2-2' }}</div>
+    </div>
+    <div class="vix-box">
+      <div class="vix-label">INDIA VIX</div>
+      <div class="vix-value" [class.high]="vix > 20">{{ vix | number:'1.2-2' }}</div>
+    </div>
+  </section>
+
+  <!-- ── Stats Cards ── -->
+  <section class="stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-label">Capital</div>
+      <div class="stat-value">₹{{ capital | number:'1.0-0' }}</div>
+    </div>
+
+    <div class="stat-card" [class.positive]="dailyPnl >= 0" [class.negative]="dailyPnl < 0">
+      <div class="stat-label">Today's P&amp;L</div>
+      <div class="stat-value pnl">{{ dailyPnl >= 0 ? '+' : '' }}₹{{ dailyPnl | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="stat-card" [class.positive]="totalPnl >= 0" [class.negative]="totalPnl < 0">
+      <div class="stat-label">Total P&amp;L</div>
+      <div class="stat-value pnl">{{ totalPnl >= 0 ? '+' : '' }}₹{{ totalPnl | number:'1.2-2' }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Win Rate</div>
+      <div class="stat-value">{{ winRate }}%</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Total Trades</div>
+      <div class="stat-value">{{ totalTrades }}</div>
+    </div>
+
+    <div class="stat-card bot-status" [class.running]="botRunning">
+      <div class="stat-label">Bot Status</div>
+      <div class="stat-value status-text">{{ botRunning ? 'Running 🟢' : 'Stopped 🔴' }}</div>
+      <div class="status-sub">{{ statusMsg }}</div>
+    </div>
+
+  </section>
+
+  <!-- ── Control Button ── -->
+  <section class="controls">
+    <button class="btn-toggle" [class.stop]="botRunning" (click)="toggleBot()">
+      {{ botRunning ? '⏹ Stop Bot' : '▶ Start Bot' }}
+    </button>
+    <div class="control-note">
+      {{ botRunning ? 'Bot is scanning Nifty every 2 minutes' : 'Press Start to begin paper trading' }}
+    </div>
+  </section>
+
+  <!-- ── Trade History ── -->
+  <section class="trade-section">
+    <h2 class="section-title">Trade History</h2>
+    <div class="table-wrap">
+      <table class="trade-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Time</th>
+            <th>Action</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>P&amp;L</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of trades" [class.buy-row]="t.action === 'BUY'" [class.sell-row]="t.action === 'SELL'">
+            <td class="mono">{{ t.id }}</td>
+            <td class="mono">{{ t.time }}</td>
+            <td><span class="badge" [class.buy]="t.action === 'BUY'" [class.sell]="t.action === 'SELL'">{{ t.action }}</span></td>
+            <td class="mono">₹{{ t.price | number:'1.2-2' }}</td>
+            <td class="mono">{{ t.qty }}</td>
+            <td class="mono" [class.positive]="t.pnl > 0" [class.negative]="t.pnl < 0">
+              {{ t.pnl !== 0 ? (t.pnl > 0 ? '+' : '') + '₹' + (t.pnl | number:'1.2-2') : '—' }}
+            </td>
+            <td><span class="status-pill" [class.open]="t.status === 'OPEN'">{{ t.status }}</span></td>
+          </tr>
+          <tr *ngIf="trades.length === 0">
+            <td colspan="7" class="empty">No trades yet. Start the bot to begin.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>

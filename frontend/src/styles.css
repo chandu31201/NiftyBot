@@ -1,0 +1,27 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0d12;
+  --surface:   #111621;
+  --border:    #1e2535;
+  --accent:    #00e5a0;
+  --accent2:   #ff4e6a;
+  --text:      #e8ecf4;
+  --muted:     #5a6480;
+  --buy:       #00e5a0;
+  --sell:      #ff4e6a;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-ui:   'Syne', sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
